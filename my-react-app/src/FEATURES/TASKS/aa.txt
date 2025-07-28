@@ -1,0 +1,113 @@
+ <button
+        onClick={addNode}
+        style={{
+          position: 'absolute',
+          zIndex: 10,
+          left: 10,
+          top: 10,
+          padding: '8px 12px',
+          backgroundColor: '#007bff',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 4,
+          cursor: 'pointer',
+        }}
+      >
+        Add Node
+      </button>
+
+      <button
+        onClick={deleteSelected}
+        style={{
+          position: 'absolute',
+          zIndex: 10,
+          left: 110,
+          top: 10,
+          padding: '8px 12px',
+          backgroundColor: '#dc3545',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 4,
+          cursor: 'pointer',
+        }}
+      >
+        Delete Selected
+      </button>
+
+
+
+
+
+      import React, { useCallback, useState } from 'react';
+import {
+  ReactFlow,
+  Controls,
+  Background,
+  applyEdgeChanges,
+  applyNodeChanges,
+  addEdge,
+  useReactFlow,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import useFetch from '../../HOOKS/useFetch';
+import { useAuthStore } from '../../STORE/Auth';
+import TransformTreeToReactFlow from './TreeToReactFlow';
+import type { TaskNode } from '../../SERVICES/Tasks/Model';
+
+    
+export default function Flow() {
+  console.log(useAuthStore.getState().auth);
+  const {data:tree,error,loading} =  useFetch<TaskNode>("/tasks/c1c13d10-8e7a-4162-90df-ea1e63408200")  
+
+  if (!tree) return <div>No data</div>;
+
+  const {nodes:transformedNodes,edges} = TransformTreeToReactFlow(tree[0] as TaskNode)
+
+  const [nodes, setNodes] = useState(transformedNodes);
+  //  const [edges, setEdges] = useState(initialEdges);
+  // const [nodeId, setNodeId] = useState(3);
+
+   const onNodesChange = useCallback((changes) => {
+     setNodes((nds) => applyNodeChanges(changes, nds));
+   }, []);
+
+  // const onEdgesChange = useCallback((changes) => {
+  //   setEdges((eds) => applyEdgeChanges(changes, eds));
+  // }, []);
+
+  // const onConnect = useCallback((params) => {
+  //   setEdges((eds) => addEdge(params, eds));
+  // }, []);
+
+  // const addNode = () => {
+  //   const newNode = {
+  //     id: nodeId.toString(),
+  //     position: { x: Math.random() * 400, y: Math.random() * 400 },
+  //     data: { label: `Node ${nodeId}` },
+  //   };
+
+  //   setNodes((nds) => [...nds, newNode]);
+  //   setNodeId((id) => id + 1);
+  // };
+
+  // const deleteSelected = () => {
+  //   setNodes((nds) => nds.filter((node) => !node.selected));
+  //   setEdges((eds) => eds.filter((edge) => !edge.selected));
+  // };
+
+  return (
+    <div style={{ height: '100vh', width: '100%', position: 'relative' }}>
+     
+
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        fitView
+      >
+        <Background />
+        <Controls />
+      </ReactFlow>
+    </div>
+  );
+}
