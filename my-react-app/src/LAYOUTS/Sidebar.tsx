@@ -1,14 +1,14 @@
-import { Drawer, List, ListItem, ListItemText, Box, } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, Box, ListItemButton, } from '@mui/material';
 
 import SidebarUserProfile from './SidebarUserProfile';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 const SidebarElements = [
-  {text:'Home' , path:""},
-  {text:'My Tasks' , path:""},
-  {text:'Projects' , path:""},
+  {text:'Home' , path:"/dashboard/home"},
+  {text:'My Tasks' , path:"/dashboard/tasks"},
+  {text:'Projects' , path:"/dashboard/projects"},
   {text:'Settings' , path:""},
   {text:'Users' , path:""},
 ]
@@ -33,20 +33,23 @@ export default function Sidebar() {
         <Box sx={{ overflow: 'auto' }}>
           <List>
             <ListItem>
-                <ListItemText 
+                <ListItemText  sx={{textAlign:"center"}}
                   primaryTypographyProps={{ fontSize: '1.25rem' , px:3 , mt:2 }}
                 >Menu</ListItemText>
             </ListItem>
-            {['Home' ,'My Tasks', 'Projects', 'Settings', 'Users'].map((text,index) => (
-              <ListItem key={index}  
+            {SidebarElements.map((element,index) => (
+              <ListItemButton
+              key={index}
+              component={NavLink}
+              to={element.path}
               sx={{
                 cursor:"pointer",
                 '&:hover .MuiListItemText-primary': {
                   color: 'red',
                 }
             }}>
-                <ListItemText primary={text} sx={{textAlign:"center",color:"#757575"}} />
-              </ListItem>
+                <ListItemText primary={element.text} sx={{textAlign:"center",color:"#757575"}}><NavLink to={element.path}/></ListItemText>
+              </ListItemButton>
             ))}
           </List>
         </Box>

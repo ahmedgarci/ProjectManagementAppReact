@@ -4,7 +4,7 @@ import { Auth } from './FEATURES/AUTH/Auth'
 import Sidebar from './LAYOUTS/Sidebar'
 import FlowTasks from "./FEATURES/TASKS/ReactFlow"
 import HomePage from "./PAGES/HomePage"
-import ProjectsPage from './PAGES/ProjectsPage'
+import ProjectsPage from './PAGES/ReportPage'
 import {ToastContainer} from 'react-toastify'
 import { TaskProvider } from './HOOKS/Tasks/TaskContext'
 function App() {

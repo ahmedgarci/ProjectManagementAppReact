@@ -1,24 +1,20 @@
-import { Divider } from '@mui/material';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import { AuthenticateUser } from '../../SERVICES/Auth/Login';
 import type { AuthReq } from '../../SERVICES/Auth/Model/AuthModel';
 import {  useNavigate } from 'react-router-dom';
-import { AuthTypography } from '../../COMPONENTS/Auth/AuthTypography';
 
 
 export function AuthForm() {
     const [auth,setAuth] = useState<AuthReq>({email:null,password:null});
     const [error,setErro]= useState<string>()
     const navigate = useNavigate()
-    function Login(e:React.MouseEvent<HTMLButtonElement>){
+    async function Login(e:React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
     try {
-      AuthenticateUser(auth)
-     navigate("/dashboard/tasks")
+      await AuthenticateUser(auth)
+     navigate("/dashboard/home")
     } catch (error) {
       setErro("invalid Credentials")
     }

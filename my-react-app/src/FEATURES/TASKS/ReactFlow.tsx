@@ -1,14 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
-import {ReactFlow,Controls,Background,applyEdgeChanges,applyNodeChanges,addEdge, type Node, type Edge} from '@xyflow/react';
+import {ReactFlow,Controls,Background,applyEdgeChanges,applyNodeChanges,addEdge, type Node, type Edge, type Connection, ReactFlowProvider} from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import useFetch from '../../HOOKS/useFetch';
 import TransformTreeToReactFlow from './TreeToReactFlow';
 import type { TaskNode } from '../../SERVICES/Tasks/Model';
 import TaskDetailsForm from './TaskForm/TaskDetailsForm';
 import { useTaskContext } from '../../HOOKS/Tasks/TaskContext';
+import addNewProjectTask from '../../SERVICES/Tasks/AddNewTask';
+import AddEdge from '../../SERVICES/Tasks/AddEdgeBetweenTasks';
+import ContributorsHeader from './Main/ContributorsHeader';
+import { Box, Divider, Paper, Stack } from '@mui/material';
+import CustomNode from './FlowCustomNode';
+
+const CustomNodeType = {
+  custom:CustomNode
+}
 
 export default function Flow() {
-    const { data: tree, error, loading } = useFetch<TaskNode>("/tasks/c1c13d10-8e7a-4162-90df-ea1e63408200");  
+    const { data: tree, error, loading } = useFetch<TaskNode[]>("/tasks/c1c13d10-8e7a-4162-90df-ea1e63408200");  
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [addNodeModal,setAddNodeModal] = useState<boolean>(false)
@@ -27,19 +36,18 @@ export default function Flow() {
     }, []);
 
     const onEdgesChange = useCallback((changes) => {
-      console.log(changes);
       setEdges((eds) => applyEdgeChanges(changes, eds));
     }, []);
   
-    const onConnect = useCallback((params) => {
-      
+    const onConnect = useCallback((params:Connection) => {
+      AddEdge(params.source,params.target)
       setEdges((eds) => addEdge(params, eds));
     }, []);
   
-    const addNode = ()=>{      
+    const addNode = async()=>{      
       setAddNodeModal(true)
       console.log(Task);
-      if(!Task){
+      if(!Task === undefined){
         return;
       }
       const newNode = {
@@ -48,6 +56,11 @@ export default function Flow() {
           data: { label: `${Task.task}` },
         }
       setNodes((prev) => [...prev, newNode])
+      try {
+        await addNewProjectTask(Task)
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     // const onNodeClick = useCallback((event:any, node) => {
@@ -62,17 +75,40 @@ export default function Flow() {
 //     if (error) return <div>Error: {error}</div>;
 //     if (!tree) return <div>No data</div>;    
 // //    console.log(useAuthStore().auth);
-
-
- 
- 
-  
     return (
       <>
-              <TaskDetailsForm state={addNodeModal} setState={setAddNodeModal} onSubmit={addNode}/>
 
-      <div style={{ height: '100vh', width: '100%', position: 'relative' }}>
+ <Paper
+      elevation={0}
+      sx={{
+        px: 3,
+        py: 2,
+        borderColor: 'divider',
+        backgroundColor: 'background.default',
+      }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={2}
+        flexWrap="wrap"
+      >
+        <Box>
+        <TaskDetailsForm
+        state={addNodeModal}
+        setState={setAddNodeModal}
+        onSubmit={addNode}
+      />
+        </Box>
+        <ContributorsHeader ProjectPublicId="c1c13d10-8e7a-4162-90df-ea1e63408200" />
+      </Stack>
+      <Divider sx={{ my: 2 }} />     
+    </Paper>     
+      <div style={{ height: '100vh', width: '100%', position: 'relative'}}>
+        <ReactFlowProvider>
         <ReactFlow
+          nodeTypes={CustomNodeType}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -83,6 +119,7 @@ export default function Flow() {
           <Background />
           <Controls />
         </ReactFlow>
+        </ReactFlowProvider>
       </div>
       </>
 

@@ -24,6 +24,11 @@ import {
   EditOutlined,
   DeleteOutline,
 } from '@mui/icons-material';
+import useFetch from '../HOOKS/useFetch';
+import Loader from '../COMPONENTS/Loading/Loading';
+import type { ProjectDetailsResponse } from '../SERVICES/Projects/ProjectDomain';
+import { green } from '@mui/material/colors';
+import CreateProjectModal from '../COMPONENTS/HOME/CreateProjectForm';
 
 const mockProjects = [
   {
@@ -45,17 +50,28 @@ const mockProjects = [
 ];
 
 export default function ProjectsPage() {
-  const [projects] = useState(mockProjects);
+//  const [projects] = useState(mockProjects);
   const [search, setSearch] = useState('');
-  const [openNew, setOpenNew] = useState(false);
+  const [open,setOpen] = React.useState<boolean>(false)
 
-  const filtered = projects.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const {data:projects,loading,error} =  useFetch<ProjectDetailsResponse[]>("/project/all");
 
-  const statusColor = (status) =>
-    status === 'Completed' ? 'success' : status === 'In Progress' ? 'info' : 'default';
-
+  const getStageColor = (stage: string): 'default' | 'success' | 'info'  => {
+    switch (stage.toLowerCase()) {
+      case 'completed':
+        return 'success';
+      case 'inprogress':
+        return 'info';
+      case 'notstarted':
+        return 'default';
+      default:
+        return 'default';
+    }
+  };
+  
+  
+    if(loading){return <Loader/>}
+  
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -63,12 +79,13 @@ export default function ProjectsPage() {
         <Button
           variant="contained"
           startIcon={<AddRounded />}
-          onClick={() => setOpenNew(true)}
+          onClick={() => setOpen(true)}
           sx={{ borderRadius: 3, textTransform: 'none', bgcolor:"#f4511e", p:1 }}
         >
           New Project
         </Button>
       </Box>
+      <CreateProjectModal state={open} setState={setOpen} onSubmit={()=>console.log("object")}/>
 
       <TextField
         placeholder="Search projects..."
@@ -87,8 +104,7 @@ export default function ProjectsPage() {
       />
 
       <Grid container spacing={3}>
-        {filtered.map((project) => {
-          const progress = (project.completedTasks / project.totalTasks) * 100;
+        {projects?.map((project) => {
 
           return (
             <Grid item xs={12} sm={6} md={4} size={4} key={project.id}>
@@ -107,29 +123,29 @@ export default function ProjectsPage() {
                 <CardContent sx={{ p: 0 }}>
                   <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
                     <Typography variant="subtitle1" fontWeight="500">
-                      {project.name}
+                      {project.projectName}
                     </Typography>
                     <Chip
-                      label={project.status}
-                      color={statusColor(project.status)}
+                      label={project.stage}
+                      color={getStageColor(project.stage)}
                       size="small"
                       sx={{ fontSize: '0.7rem', borderRadius: '6px' }}
                     />
                   </Box>
 
                   <Typography variant="caption" color="text.secondary">
-                    Due: {project.deadline}
+                    Due: {project.endsAt}
                   </Typography>
 
                   <Box mt={2}>
                     <LinearProgress
                       variant="determinate"
-                      value={progress}
+                      value={70}
                       color='error'
                       sx={{ borderRadius: 10, height: 6, backgroundColor: '#ffe5e5',  }}
                     />
                     <Typography variant="caption" mt={1} display="block">
-                      {project.completedTasks}/{project.totalTasks} tasks
+                      7/10 tasks
                     </Typography>
                   </Box>
                 </CardContent>
@@ -137,7 +153,7 @@ export default function ProjectsPage() {
                 <Box display="flex" justifyContent="flex-end" gap={1} mt={2}>
                   <IconButton size="small"><VisibilityOutlined fontSize="small" /></IconButton>
                   <IconButton size="small"><EditOutlined fontSize="small" /></IconButton>
-                  <IconButton size="small"><DeleteOutline fontSize="small" /></IconButton>
+                  <IconButton size="small" onClick={()=>console.log("object")}><DeleteOutline fontSize="small" /></IconButton>
                 </Box>
               </Card>
             </Grid>
@@ -145,24 +161,7 @@ export default function ProjectsPage() {
         })}
       </Grid>
 
-      {/* New Project Dialog */}
-      <Dialog open={openNew} onClose={() => setOpenNew(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 500 }}>Create Project</DialogTitle>
-        <DialogContent sx={{ py: 2 }}>
-          <TextField label="Project Name" fullWidth variant="outlined" sx={{ my: 2 }} />
-          <TextField
-            label="Deadline"
-            type="date"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            variant="outlined"
-          />
-        </DialogContent>
-        <DialogActions sx={{ pr: 3, pb: 2 }}>
-          <Button onClick={() => setOpenNew(false)} color="inherit">Cancel</Button>
-          <Button variant="contained">Create</Button>
-        </DialogActions>
-      </Dialog>
+     
     </Container>
   );
 }

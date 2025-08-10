@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -8,7 +7,6 @@ import DatePickers from './TaskDate';
 import FormTitleLabel from './FormTitle';
 import TaskSubmitBtn from './FormSubmitBtn';
 import AddIcon from '@mui/icons-material/Add';
-import type { StateProps } from './Shared/StateProps';
 import type { TaskDetailsFormProps } from './Shared/FormProps';
 
 const style = {

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,9 +12,12 @@ import Loader from '../../COMPONENTS/Loading/Loading';
 
 export default function UserTasksTable() {
    const {data:Tasks,error,loading} =  useFetch<UserUrgentTasksResponse[]>("/tasks/urgent");
-   if('4'==='4'){
+
+   if(loading){
     return <Loader />
    }
+
+   
    return (
     <>
     {(Tasks && Tasks.length > 0 )?

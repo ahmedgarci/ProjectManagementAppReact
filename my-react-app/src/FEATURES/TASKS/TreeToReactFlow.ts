@@ -1,8 +1,7 @@
 import type { TaskNode } from "../../SERVICES/Tasks/Model";
 import type { Node, Edge } from "@xyflow/react";
 
-
-export default function TransformTreeToReactFlow(tree:TaskNode):{edges:Edge[],nodes:Node[]}{
+export default function TransformTreeToReactFlow(tree:TaskNode[]):{edges:Edge[],nodes:Node[]}{
     const nodes:Node[] = [];
     const edges:Edge[] = [];
 
@@ -10,15 +9,16 @@ export default function TransformTreeToReactFlow(tree:TaskNode):{edges:Edge[],no
         const  nodeId:string = task.taskId;
         nodes.push({
             id:nodeId,
+            type:'custom',
             data:{
-                label:`${task.task}`
+                task:`${task.task}`,
+                stage:`${task.stage}`
             },
             position:{
                 x:index*200,
                 y:depth*150
             }
         })
-
         if(parentId){
             edges.push({
                 type:"default",
@@ -32,8 +32,9 @@ export default function TransformTreeToReactFlow(tree:TaskNode):{edges:Edge[],no
         }
     }
 
-
-    Traverse(tree)
+    tree.forEach(element => {
+        Traverse(element)
+    });
 
 
     return {nodes,edges};

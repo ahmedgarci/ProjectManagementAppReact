@@ -27,6 +27,7 @@ export type TaskNode = {
     taskStartingDate: string;
     taskEndingDate: string;
     children?: TaskNode[];
+    stage:string
 }
 
 export type ProjectContributorResponse = {

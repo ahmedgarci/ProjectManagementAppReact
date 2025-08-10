@@ -16,15 +16,15 @@ export default function UsersSelect() {
   const {state,setState} = useTaskContext()
 
   const { data: contributors, loading, error } = useFetch<ProjectContributorResponse[]>("/contributors/c1c13d10-8e7a-4162-90df-ea1e63408200")
-    
+
+
+  if (loading) { return <Loader /> }
+  if(error){return <p>oops error</p>}
 
   const handleChange = (event: SelectChangeEvent) => {
     setState((prev)=>({...prev,userId:event.target.value}))
   };
 
-
-  if (loading) { return <Loader /> }
-  if(error){return <p>oops error</p>}
 
   return (
     <div>
