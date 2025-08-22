@@ -7,7 +7,7 @@ export type AuthReq = {
 
 export type AuthRes = {
     token:string
-    userEmail:string
+    username:string
     jobPos:string
 }
 

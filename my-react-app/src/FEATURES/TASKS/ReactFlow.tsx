@@ -11,13 +11,23 @@ import AddEdge from '../../SERVICES/Tasks/AddEdgeBetweenTasks';
 import ContributorsHeader from './Main/ContributorsHeader';
 import { Box, Divider, Paper, Stack } from '@mui/material';
 import CustomNode from './FlowCustomNode';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const CustomNodeType = {
   custom:CustomNode
 }
 
 export default function Flow() {
-    const { data: tree, error, loading } = useFetch<TaskNode[]>("/tasks/c1c13d10-8e7a-4162-90df-ea1e63408200");  
+    const {projectId} = useParams()
+    const navigate = useNavigate();
+    useEffect(()=>{
+      if(!projectId || projectId==undefined){
+        navigate("/dashboard/projects")
+        return;
+      }
+    },[projectId])
+    
+    const { data: tree, error, loading } = useFetch<TaskNode[]>(projectId ? `/tasks/${projectId}` : null);    
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [addNodeModal,setAddNodeModal] = useState<boolean>(false)
@@ -46,7 +56,6 @@ export default function Flow() {
   
     const addNode = async()=>{      
       setAddNodeModal(true)
-      console.log(Task);
       if(!Task === undefined){
         return;
       }
@@ -57,7 +66,7 @@ export default function Flow() {
         }
       setNodes((prev) => [...prev, newNode])
       try {
-        await addNewProjectTask(Task)
+        await addNewProjectTask(Task,projectId as string)
       } catch (error) {
         console.log(error);
       }

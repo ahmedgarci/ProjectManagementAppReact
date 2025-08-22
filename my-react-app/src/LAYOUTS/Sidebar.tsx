@@ -1,16 +1,19 @@
-import { Drawer, List, ListItem, ListItemText, Box, ListItemButton, } from '@mui/material';
+import { Drawer, List, ListItem, ListItemText, Box, ListItemButton, ListItemIcon, } from '@mui/material';
 
 import SidebarUserProfile from './SidebarUserProfile';
 import { NavLink, Outlet } from 'react-router-dom';
-
+import HomeIcon from '@mui/icons-material/Home';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
 const drawerWidth = 240;
 
 const SidebarElements = [
-  {text:'Home' , path:"/dashboard/home"},
-  {text:'My Tasks' , path:"/dashboard/tasks"},
+  {text:'Home' , path:"/dashboard/home",icon:<HomeIcon/>},
+  {text:'Tasks' , path:"/dashboard/tasks/",icon:<AccountTreeIcon/>},
   {text:'Projects' , path:"/dashboard/projects"},
-  {text:'Settings' , path:""},
-  {text:'Users' , path:""},
+  {text:'Users' , path:"",icon:<PersonIcon/>},
+
 ]
 
 export default function Sidebar() {
@@ -47,10 +50,37 @@ export default function Sidebar() {
                 '&:hover .MuiListItemText-primary': {
                   color: 'red',
                 }
-            }}>
-                <ListItemText primary={element.text} sx={{textAlign:"center",color:"#757575"}}><NavLink to={element.path}/></ListItemText>
+            }}
+            >
+       <ListItemText
+        sx={{ color: "#757575" }}
+        primary={
+          <Box display="flex" alignItems="center" justifyContent="center">
+            {element.icon}
+            <Box component="span" ml={1}>
+              {element.text}
+            </Box>
+          </Box>
+          }
+      />    
               </ListItemButton>
             ))}
+              <ListItemText
+              sx={{
+                cursor:"pointer",
+                color:"#757575",
+                '&:hover .MuiListItemText-primary': {
+              color: 'red',
+              }
+}}        primary={
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <LogoutIcon/>
+            <Box component="span" ml={1}>
+              Disconnect
+            </Box>
+          </Box>
+          }
+      />  
           </List>
         </Box>
       </Drawer>

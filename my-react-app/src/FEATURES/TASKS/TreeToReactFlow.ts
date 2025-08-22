@@ -12,7 +12,9 @@ export default function TransformTreeToReactFlow(tree:TaskNode[]):{edges:Edge[],
             type:'custom',
             data:{
                 task:`${task.task}`,
-                stage:`${task.stage}`
+                stage:`${task.stage}`,
+                start:`${task.taskStartingDate}`,
+                end:`${task.taskEndingDate}`
             },
             position:{
                 x:index*200,

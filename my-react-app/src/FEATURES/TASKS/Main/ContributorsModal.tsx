@@ -11,6 +11,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import type { ProjectContributorResponse } from '../../../SERVICES/Tasks/Model';
 import AddNewContributor from './NewContributor';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const modalStyle = {
   position: 'absolute' as const,
@@ -38,7 +39,7 @@ export default function ContributorsModal({ contributors }: ContributorsModalPro
   return (
     <>
       <IconButton onClick={handleOpen} aria-label="View Contributors">
-        <VisibilityIcon />
+        <GroupsIcon />
       </IconButton>
 
       <Modal

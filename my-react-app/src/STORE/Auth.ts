@@ -1,4 +1,5 @@
 import {create} from "zustand";
+import { persist } from "zustand/middleware";
 import type { AuthRes } from "../SERVICES/Auth/Model/AuthModel";
 
 type AuthStore = {
@@ -7,10 +8,17 @@ type AuthStore = {
     disconnect:()=>void
 }
 
-const useAuthStore = create<AuthStore>((set)=>({
-    auth:null,
-    setAuth:(auth)=>set({auth}),
-    disconnect:()=>set({auth:null})
-}))
-
+const useAuthStore = create<AuthStore>()(
+    persist(
+      (set) => ({
+        auth: null,
+        setAuth: (auth) => set({ auth }),
+        disconnect: () => set({ auth: null }),
+      }),
+      {
+        name: "auth-storage",
+      }
+    )
+  );
+  
 export {useAuthStore};
