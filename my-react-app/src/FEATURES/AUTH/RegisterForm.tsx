@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import type { RegisterRequest } from '../../SERVICES/Auth/Model/AuthModel';
 import Register from '../../SERVICES/Auth/Register';
 import { toast } from 'react-toastify';
+import DisplayError from '../../COMPONENTS/common/DisplayError';
+import Loader from '../../COMPONENTS/Loading/Loading';
 
 
 export function RegisterForm() {
@@ -16,8 +18,8 @@ export function RegisterForm() {
       try {
           await Register(register)
           toast.success("registred successfully")
-      } catch (error) {
-          console.log(error);        
+      } catch (error:any) {
+        setErro(error)
       }finally{
         setLoading(false)
       }
@@ -96,7 +98,11 @@ export function RegisterForm() {
           }}
         />
 
+          {error && <DisplayError error={error}/>}
 
+          {loading? <Loader/>  :
+
+    
         <Button
           variant="contained"
           size="large"
@@ -115,6 +121,7 @@ export function RegisterForm() {
         >
           Register
         </Button>
+}
       </>
   );
 }

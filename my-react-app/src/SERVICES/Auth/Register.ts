@@ -10,9 +10,9 @@ export default async function Register(req:RegisterRequest):Promise<void>{
         userPasswordVo:{"password":req.password}
     }
     try {
-      const response =  await axios.post("http://localhost:8080/api/v1/authentication/register",userInfo)
-    } catch (error) {
-        console.log(error);
+        await axios.post("http://localhost:8080/api/v1/authentication/register",userInfo)
+    } catch (error:any) {
+        throw error.response.data.error
     }
 }
 

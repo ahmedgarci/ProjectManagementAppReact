@@ -1,22 +1,35 @@
 import { Drawer, List, ListItem, ListItemText, Box, ListItemButton, ListItemIcon, } from '@mui/material';
 
 import SidebarUserProfile from './SidebarUserProfile';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import LogoutIcon from '@mui/icons-material/Logout';
-import PersonIcon from '@mui/icons-material/Person';
+import LogoutUser from '../SERVICES/Auth/Logout';
+import { useAuthStore } from '../STORE/Auth';
+import { toast } from 'react-toastify';
 const drawerWidth = 240;
 
 const SidebarElements = [
   {text:'Home' , path:"/dashboard/home",icon:<HomeIcon/>},
   {text:'Tasks' , path:"/dashboard/tasks/",icon:<AccountTreeIcon/>},
   {text:'Projects' , path:"/dashboard/projects"},
-  {text:'Users' , path:"",icon:<PersonIcon/>},
 
 ]
 
 export default function Sidebar() {
+ const navigate =  useNavigate();
+  function HandleLogout(){
+    try {
+      LogoutUser();
+      useAuthStore.getState().disconnect();
+      navigate("/")
+    } catch (error) {
+        toast.error("error occured while logging out")
+    }
+
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
     <Drawer
@@ -65,22 +78,21 @@ export default function Sidebar() {
       />    
               </ListItemButton>
             ))}
-              <ListItemText
-              sx={{
-                cursor:"pointer",
-                color:"#757575",
-                '&:hover .MuiListItemText-primary': {
-              color: 'red',
-              }
-}}        primary={
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <LogoutIcon/>
-            <Box component="span" ml={1}>
-              Disconnect
-            </Box>
-          </Box>
-          }
-      />  
+              <ListItemButton
+                onClick={HandleLogout}
+                sx={{
+                cursor: "pointer",
+                alignItems:"center",
+                color: "#757575",
+                '&:hover': {
+                color: 'red',
+          },}}
+              >
+  <ListItemIcon>
+    <LogoutIcon />
+  </ListItemIcon>
+    <ListItemText primary="Disconnect" />
+</ListItemButton>
           </List>
         </Box>
       </Drawer>

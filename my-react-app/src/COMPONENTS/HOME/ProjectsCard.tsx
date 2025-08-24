@@ -1,25 +1,21 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import {Button, Toolbar, Typography  } from '@mui/material';
-import CreateProjectModal from './CreateProjectForm';
+import {Toolbar, Typography  } from '@mui/material';
+import type { StatsCardProps } from '../../SERVICES/Home/domain';
 
 
-export default function ProjectsCard() {
-      const [open,setOpen] = React.useState<boolean>(false)
+
+export default function StatCard({text,stat}:StatsCardProps) {
 
       return (
         <Box sx={{ flexGrow: 1  , pl:2 , height:'100%' , width:'100%'}}>
             <Toolbar/>
-            <Box sx={{ p: 2, display: "flex", flexDirection: "column", alignItems: "flex-start"  , borderRadius:3 , bgcolor:"white", boxShadow:1  }}>
+            <Box sx={{ p: 2, display: "flex", flexDirection: "column", alignItems: "center"  , borderRadius:3 , bgcolor:"white", boxShadow:1  }}>
           <Typography variant="h6" sx={{fontWeight:600, fontSize:20,color:"#1a237e"}} >
-            Total Projects
+            {text}
         </Typography>
         <Typography variant="h5" sx={{fontSize:30}}  gutterBottom>
-            184
-        </Typography>
-          <Button sx={{color:"white" ,borderRadius: 3, textTransform: 'none', bgcolor:"#f4511e", p:1,px:2}} onClick={()=>setOpen(true)}>Create new Project</Button>
-          <CreateProjectModal state={open} setState={setOpen} onSubmit={()=>console.log("object")}/>
-   
+            {stat}
+        </Typography>   
     </Box>
     </Box>
   );

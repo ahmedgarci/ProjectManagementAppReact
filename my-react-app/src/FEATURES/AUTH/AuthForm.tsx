@@ -4,11 +4,14 @@ import React, { useState } from 'react';
 import { AuthenticateUser } from '../../SERVICES/Auth/Login';
 import type { AuthReq } from '../../SERVICES/Auth/Model/AuthModel';
 import {  useNavigate } from 'react-router-dom';
+import DisplayError from '../../COMPONENTS/common/DisplayError';
+import Loader from '../../COMPONENTS/Loading/Loading';
 
 
 export function AuthForm() {
     const [auth,setAuth] = useState<AuthReq>({email:null,password:null});
-    const [error,setErro]= useState<string>()
+    const [loading,setLoading] = useState<boolean>(false);
+    const [error,setError]= useState<string>()
     const navigate = useNavigate()
     async function Login(e:React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
@@ -16,7 +19,7 @@ export function AuthForm() {
       await AuthenticateUser(auth)
      navigate("/dashboard/home")
     } catch (error) {
-      setErro("invalid Credentials")
+      setError("invalid Credentials")
     }
   }
 
@@ -56,7 +59,10 @@ export function AuthForm() {
             },
           }}
         />
-
+          {error && <DisplayError error={error}/>}
+          {loading ?  <Loader/>
+        :
+          
         <Button
           variant="contained"
           size="large"
@@ -74,8 +80,7 @@ export function AuthForm() {
           }}
         >
           Login
-        </Button>
-       
+        </Button>}
         </>
   );
 }

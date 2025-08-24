@@ -29,7 +29,6 @@ export default function ProjectCard({ project }: { project: ProjectDetailsRespon
         "&:hover": { borderColor: "#dd2c00", boxShadow: 2 },
       }}
     >
-      {/* ✅ Wrap only the CardContent with NavLink */}
       <NavLink
         to={`/dashboard/tasks/${project.projectId}`}
         style={{ textDecoration: "none", color: "inherit" }}
@@ -40,9 +39,11 @@ export default function ProjectCard({ project }: { project: ProjectDetailsRespon
               {project.projectName}
             </Typography>
           </Box>
-
           <Typography variant="caption" color="text.secondary">
-            Due: {project.endsAt}
+            from : {project.startedAt}
+          </Typography> <br></br>
+          <Typography variant="caption" color="text.secondary">
+            to: {project.endsAt}
           </Typography>
 
           <Box mt={2}>

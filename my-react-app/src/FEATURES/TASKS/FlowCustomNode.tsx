@@ -23,7 +23,6 @@ const CustomNode = ({ data }: any) => {
     >
       <Handle type="target" position={Position.Top} />
 
-      {/* Top row: task title and chip */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="subtitle2" fontWeight="bold" sx={{ flex: 1, pr: 1 }} noWrap>
           {data.task}

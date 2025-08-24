@@ -16,7 +16,6 @@ export default function CenteredCalendar() {
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateCalendar
-         
           />
         </LocalizationProvider>
       </Box>

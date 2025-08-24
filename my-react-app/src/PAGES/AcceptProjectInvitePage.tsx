@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../COMPONENTS/Loading/Loading";
 import { useEffect } from "react";
-import AcceptProjectInvitation from "../SERVICES/Auth/AcceptProjectUnvitation";
+import AcceptProjectInvitation from "../SERVICES/Projects/AcceptProjectUnvitation";
 import { useAuthStore } from "../STORE/Auth";
 
 

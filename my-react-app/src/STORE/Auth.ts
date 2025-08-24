@@ -14,6 +14,7 @@ const useAuthStore = create<AuthStore>()(
         auth: null,
         setAuth: (auth) => set({ auth }),
         disconnect: () => set({ auth: null }),
+        
       }),
       {
         name: "auth-storage",

@@ -13,7 +13,6 @@ export async function AuthenticateUser(req:AuthReq):Promise<void>{
        const {data} =  await axios.post("http://localhost:8080/api/v1/authentication/authenticate",reqBody);
        useAuthStore.getState().setAuth(data)
     } catch (error) {
-        console.log(error);
         throw "invalid Credentials"
     }
 }
