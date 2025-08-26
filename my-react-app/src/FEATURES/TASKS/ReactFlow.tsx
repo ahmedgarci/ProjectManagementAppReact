@@ -28,6 +28,8 @@ import ContributorsHeader from './Main/ContributorsHeader';
 import { Box, Divider, Paper, Stack } from '@mui/material';
 import CustomNode from './FlowCustomNode';
 import { useNavigate, useParams } from 'react-router-dom';
+import DeleteTask from '../../SERVICES/Tasks/DeleteNode';
+import { toast } from 'react-toastify';
 
 const CustomNodeType = {
   custom: CustomNode
@@ -52,9 +54,20 @@ export default function Flow() {
   const [addNodeModal, setAddNodeModal] = useState<boolean>(false);
   const { state: Task } = useTaskContext();
 
+  const deleteNode =useCallback(async(taskId:string)=>{
+    try {
+      await DeleteTask(taskId);
+      setNodes(prev => prev.filter(node=>node.id != taskId));
+      setEdges(prev=>  prev.filter((edge) => edge.source !== taskId && edge.target !== taskId))
+    } catch (error) {
+      toast.error("error deleting the node")
+    }
+  }       
+,[]) 
+
   useEffect(() => {
     if (tree) {
-      const { nodes: transformedNodes, edges: transformedEdges } =TransformTreeToReactFlow(tree);
+      const { nodes: transformedNodes, edges: transformedEdges } =TransformTreeToReactFlow(tree,deleteNode);
       setNodes(transformedNodes);
       setEdges(transformedEdges);
     }
@@ -93,15 +106,14 @@ export default function Flow() {
       position: { x: 150, y: 800 },
       data: { label: Task.task }
     };
-
     setNodes((prev) => [...prev, newNode]);
-
     try {
       await addNewProjectTask(Task, projectId as string);
     } catch (error) {
       console.error('Error adding task:', error);
     }
   };
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

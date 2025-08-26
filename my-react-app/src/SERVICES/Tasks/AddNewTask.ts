@@ -11,8 +11,7 @@ export default async function addNewProjectTask(req:CreateTaskRequest,projectId:
     parentTaskPublicIdVo:{parentTaskPublicId:req.parentTaskId}
     }     
     try {
-      const {data} =  await Api.post("/tasks/create",newReq)
-      console.log(data);
+       await Api.post("/tasks/create",newReq)
     } catch (error) {
         console.log(error);
     }

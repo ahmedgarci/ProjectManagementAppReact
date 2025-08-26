@@ -1,7 +1,9 @@
 import type { TaskNode } from "../../SERVICES/Tasks/Model";
 import type { Node, Edge } from "@xyflow/react";
 
-export default function TransformTreeToReactFlow(tree:TaskNode[]):{edges:Edge[],nodes:Node[]}{
+
+
+export default function TransformTreeToReactFlow(tree:TaskNode[],  deleteNodeCallback: (id: string) => void):{edges:Edge[],nodes:Node[]}{
     const nodes:Node[] = [];
     const edges:Edge[] = [];
 
@@ -14,7 +16,8 @@ export default function TransformTreeToReactFlow(tree:TaskNode[]):{edges:Edge[],
                 task:`${task.task}`,
                 stage:`${task.stage}`,
                 start:`${task.taskStartingDate}`,
-                end:`${task.taskEndingDate}`
+                end:`${task.taskEndingDate}`,
+                onDelete:()=>deleteNodeCallback(nodeId)
             },
             position:{
                 x:index*200,

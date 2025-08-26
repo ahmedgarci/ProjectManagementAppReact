@@ -1,10 +1,12 @@
 import { Api } from "../../HOOKS/AxiosApi";
-import type { TaskNode } from "./Model";
 
 
-export default async function DeleteTask(task:TaskNode) {
+export default async function DeleteTask(TaskId:string) {
     try {
-      const {data} = await  Api.delete("");
+      console.log(TaskId);
+      const response = await Api.delete(`/tasks`, {
+        params: { taskId: TaskId }
+      });
     } catch (error) {
         console.log(error);        
     }
