@@ -14,8 +14,19 @@ import getStageColor from "../../COMPONENTS/common/GetStageColor";
 import DisplayProjectInfoModal from "./DisplayProjectInfos";
 import { NavLink } from "react-router-dom";
 
-export default function ProjectCard({ project }: { project: ProjectDetailsResponse }) {
-  const [open, setOpen] = useState<boolean>(false);
+interface ProjectCardProps {
+  project: ProjectDetailsResponse;
+}
+
+export default function ProjectCard({ project }: ProjectCardProps) {
+  const [open, setOpen] = useState(false);
+
+  const { projectName, startedAt, endsAt, projectTasks, stage, projectId } = project;
+
+  const completedTasks = projectTasks?.completedTasks ?? 0;
+  const allTasks = projectTasks?.allTasks ?? 0;
+
+  const progress = allTasks > 0 ? (completedTasks / allTasks) * 100 : 0;
 
   return (
     <Card
@@ -25,31 +36,33 @@ export default function ProjectCard({ project }: { project: ProjectDetailsRespon
         px: 2,
         py: 2,
         boxShadow: 1,
-        transition: "0.2s",
-        "&:hover": { borderColor: "#dd2c00", boxShadow: 2 },
+        transition: "all 0.3s ease",
+        "&:hover": {
+          borderColor: "#dd2c00",
+          boxShadow: 3,
+          transform: "translateY(-2px)",
+        },
       }}
     >
       <NavLink
-        to={`/dashboard/tasks/${project.projectId}`}
+        to={`/dashboard/tasks/${projectId}`}
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <CardContent sx={{ p: 0 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-            <Typography variant="subtitle1" fontWeight="500">
-              {project.projectName}
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
+            <Typography variant="subtitle1" fontWeight={600}>
+              {projectName}
             </Typography>
           </Box>
+
           <Typography variant="caption" color="text.secondary">
-            from : {project.startedAt}
-          </Typography> <br></br>
-          <Typography variant="caption" color="text.secondary">
-            to: {project.endsAt}
+            From: {startedAt} | To: {endsAt}
           </Typography>
 
           <Box mt={2}>
             <LinearProgress
               variant="determinate"
-              value={70}
+              value={progress}
               color="error"
               sx={{
                 borderRadius: 10,
@@ -57,26 +70,24 @@ export default function ProjectCard({ project }: { project: ProjectDetailsRespon
                 backgroundColor: "#ffe5e5",
               }}
             />
-            <Typography variant="caption" mt={1} display="block">
-              7/10 tasks
+            <Typography variant="caption" mt={0.5} display="block">
+              {completedTasks}/{allTasks} tasks completed
             </Typography>
           </Box>
         </CardContent>
       </NavLink>
 
-      <Box display="flex" justifyContent="space-between" mt={2}>
+      <Box display="flex" justifyContent="space-between" mt={2} alignItems="center">
         <Chip
-          label={project.stage}
-          color={getStageColor(project.stage)}
+          label={stage}
+          color={getStageColor(stage)}
           size="small"
           sx={{ fontSize: "0.7rem", borderRadius: "6px" }}
         />
 
-        <Box display="flex" justifyContent="flex-end" gap={1}>
-          <DisplayProjectInfoModal
-            state={{ state: open, setState: setOpen }}
-            projectId={project.projectId}
-          />
+        <Box display="flex" gap={1}>
+          <DisplayProjectInfoModal state={{ state: open, setState: setOpen }} projectId={projectId} />
+
           <IconButton size="small" onClick={() => console.log("Delete clicked")}>
             <DeleteOutline fontSize="small" />
           </IconButton>

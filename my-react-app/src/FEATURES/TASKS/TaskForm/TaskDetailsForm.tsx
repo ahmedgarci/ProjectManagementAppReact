@@ -37,7 +37,7 @@ export default function TaskDetailsForm({state,setState,onSubmit}:TaskDetailsFor
         variant="contained"
         startIcon={<AddIcon />}
         sx={{
-          backgroundColor: 'red',
+          backgroundColor: '#DC143C',
           color: '#fff',
           padding: '10px 20px',
           borderRadius: '8px',

@@ -10,6 +10,7 @@ import {
 import type { TaskDetailsFormProps } from '../../FEATURES/TASKS/TaskForm/Shared/FormProps';
 import type { CreateProjectRequest } from '../../SERVICES/Projects/ProjectDomain';
 import CreateProject from '../../SERVICES/Projects/CreateProject';
+import { toast } from 'react-toastify';
 
 const formatDateInput = (date?: Date) => {
   if (!date) return '';
@@ -43,6 +44,7 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
   const handleCreate = async() => {
     try {
       await CreateProject(project)
+      toast.success("project was created successfully")
     } catch (error) {
       console.log(error);
     }
@@ -98,7 +100,7 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
           Cancel
         </Button>
         <Button
-          sx={{bgcolor:"red",color:"white"}}
+          sx={{bgcolor:"#DC143C",color:"white"}}
           variant="contained"
           onClick={handleCreate}
         >

@@ -9,16 +9,17 @@ import Loader from '../../../COMPONENTS/Loading/Loading';
 import { Avatar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useTaskContext } from '../../../HOOKS/Tasks/TaskContext';
+import { useParams } from 'react-router-dom';
 
 
 export default function UsersSelect() {
-
+  const {projectId} = useParams();
   const {state,setState} = useTaskContext()
 
-  const { data: contributors, loading, error } = useFetch<ProjectContributorResponse[]>("/contributors/c1c13d10-8e7a-4162-90df-ea1e63408200")
-
+  const { data: contributors, loading, error } = useFetch<ProjectContributorResponse[]>(`/contributors/${projectId}`)
 
   if (loading) { return <Loader /> }
+  if(contributors == null || contributors.length ==0) return <p className='text-center'>No contributors yet</p>
   if(error){return <p>oops error</p>}
 
   const handleChange = (event: SelectChangeEvent) => {

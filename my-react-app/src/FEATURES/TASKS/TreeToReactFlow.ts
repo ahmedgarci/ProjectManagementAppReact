@@ -15,6 +15,7 @@ export default function TransformTreeToReactFlow(tree:TaskNode[],  deleteNodeCal
             data:{
                 task:`${task.task}`,
                 stage:`${task.stage}`,
+                username:`${task.assignedToUserName}`,
                 start:`${task.taskStartingDate}`,
                 end:`${task.taskEndingDate}`,
                 onDelete:()=>deleteNodeCallback(nodeId)

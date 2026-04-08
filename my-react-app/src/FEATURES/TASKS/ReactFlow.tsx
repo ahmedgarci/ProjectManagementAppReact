@@ -67,10 +67,11 @@ export default function Flow() {
 
   useEffect(() => {
     if (tree) {
-      const { nodes: transformedNodes, edges: transformedEdges } =TransformTreeToReactFlow(tree,deleteNode);
+      const { nodes: transformedNodes, edges: transformedEdges } = TransformTreeToReactFlow(tree,deleteNode);
       setNodes(transformedNodes);
       setEdges(transformedEdges);
     }
+
   }, [tree]);
 
   const onNodesChange = useCallback(
@@ -88,9 +89,13 @@ export default function Flow() {
   );
 
   const onConnect = useCallback(
-    (params: Connection) => {
+    async(params: Connection) => {
       if (params.source && params.target) {
-        AddEdge(params.source, params.target);
+        const isCycleDetected = await AddEdge(params.source, params.target);
+        if(isCycleDetected){
+          toast.error("cycle is detected ")
+          return;
+        }
         setEdges((eds) => addEdge(params, eds));
       }
     },
@@ -109,15 +114,15 @@ export default function Flow() {
     setNodes((prev) => [...prev, newNode]);
     try {
       await addNewProjectTask(Task, projectId as string);
+      toast.success("a new task was created successfully")
     } catch (error) {
-      console.error('Error adding task:', error);
+      toast.error("error while creating the task")
     }
   };
 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (!tree) return <div>No data</div>;
 
   return (
     <>

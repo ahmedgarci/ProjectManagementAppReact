@@ -17,7 +17,7 @@ export default function ProjectsPage() {
   const [open,setOpen] = React.useState<boolean>(false)
 
   const {data:projects,loading,error} =  useFetch<ProjectDetailsResponse[]>("/project/all");  
-
+  console.log(projects);
   if(loading){return <Loader/>}
   
   return (

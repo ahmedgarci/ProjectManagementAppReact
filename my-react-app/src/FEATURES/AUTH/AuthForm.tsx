@@ -11,10 +11,11 @@ import Loader from '../../COMPONENTS/Loading/Loading';
 export function AuthForm() {
     const [auth,setAuth] = useState<AuthReq>({email:null,password:null});
     const [loading,setLoading] = useState<boolean>(false);
-    const [error,setError]= useState<string>()
+    const [error,setError]= useState<string|null>()
     const navigate = useNavigate()
     async function Login(e:React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
+    setError(null)
     try {
       await AuthenticateUser(auth)
      navigate("/dashboard/home")

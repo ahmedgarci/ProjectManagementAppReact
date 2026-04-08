@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "../STORE/Auth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Api = axios.create({
     baseURL:"http://localhost:8080/api/v1",
@@ -19,5 +21,16 @@ Api.interceptors.request.use((config)=>{
 }
 )
 
+Api.interceptors.response.use((response)=>{
+    return response;
+},
+    (error)=>{
+        if(error.response.status == 401){
+            toast.error("session expired")
+            window.location.href="/"
+        }
+        return Promise.reject(error)
+    }
+)
 
 export {Api}

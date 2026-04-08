@@ -14,7 +14,7 @@ export default function ProjectModalHeader(){
           variant="contained"
           startIcon={<AddRounded />}
           onClick={() => setOpen(true)}
-          sx={{ borderRadius: 3, textTransform: 'none', bgcolor:"#f4511e", p:1 }}
+          sx={{ borderRadius: 3, textTransform: 'none', bgcolor:"#DC143C", p:1 }}
         >
           New Project
         </Button>

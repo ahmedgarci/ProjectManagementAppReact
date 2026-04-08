@@ -23,6 +23,7 @@ export type UserUrgentTasksResponse = {
 export type TaskNode = {
     taskId: string;
     task: string;
+    assignedToUserName:string,
     taskStartingDate: string;
     taskEndingDate: string;
     children?: TaskNode[];

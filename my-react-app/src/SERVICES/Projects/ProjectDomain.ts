@@ -12,6 +12,8 @@
 
     stage:string
 
+    projectTasks:{allTasks:number, completedTasks:number}
+
 }
 
 export type CreateProjectRequest = {

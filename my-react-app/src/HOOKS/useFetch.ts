@@ -22,11 +22,10 @@ export default function useFetch<T>(path:string|null){
                 
                 const response = await Api.get(path);
                 setData(response.data);
-                console.log(response);
+                setError(undefined)
             }catch(e:any){
                 console.log(e);
                 setError(e.message || "oops something went wrong ! ")
-                console.log(e);
             }finally{
     
                 setLoading(false)

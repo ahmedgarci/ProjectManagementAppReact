@@ -45,7 +45,7 @@ export default function UserTasksTable() {
       </TableContainer>
   </>
   :
-  <Typography sx={{mt:5, pb:2 , mx:2,color:"#1a237e"}}>you have no urgent tasks</Typography>
+  <Typography sx={{mt:10, pb:2 , mx:2,color:"#1a237e"}}>you have no urgent tasks</Typography>
             }
   </>
   );

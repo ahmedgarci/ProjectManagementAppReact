@@ -5,7 +5,6 @@ import getStageColor from '../../COMPONENTS/common/GetStageColor';
 
 const CustomNode = ({ data, id }: any) => {
 
-
   return (
     <Box
       p={1.5}
@@ -52,7 +51,7 @@ const CustomNode = ({ data, id }: any) => {
 
       <Stack spacing={0.2}>
         <Typography variant="body2" color="text.secondary" noWrap>
-          Assigned to: <b>{data.assignedTo}</b>
+          Assigned to: <b>{data.username}</b>
         </Typography>
 
         <Typography variant="caption" color="text.secondary" noWrap>
