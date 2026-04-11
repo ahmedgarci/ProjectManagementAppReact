@@ -8,7 +8,6 @@ import {
   Stack,
   Divider
 } from '@mui/material';
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import type { ProjectContributorResponse } from '../../../SERVICES/Tasks/Model';
 import AddNewContributor from './NewContributor';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -97,7 +96,7 @@ export default function ContributorsModal({ contributors }: ContributorsModalPro
             </Stack>
           )}
           <Divider sx={{mt:1}} />
-          <AddNewContributor/>
+          <AddNewContributor />
         </Box>
       </Modal>
     </>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import {
   type NodeChange,
   type EdgeChange,
@@ -104,7 +104,6 @@ export default function Flow() {
 
   const addNode = async () => {
     if (!Task || !Task.task) return;
-
     const newNode: Node = {
       id: String(Math.random()),
       type: 'custom',

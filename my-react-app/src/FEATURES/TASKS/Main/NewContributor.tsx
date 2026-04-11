@@ -2,20 +2,26 @@ import { Box, Button, TextField } from "@mui/material";
 import SendInvitationToNewContributor from "../../../SERVICES/Tasks/AddNewContributor";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { Navigate, useParams } from "react-router-dom";
 
 export default function AddNewContributor() {
     const [email,setEmail] = useState<string>("")
-
+    const {projectId} = useParams();
+    if(!projectId){
+      return <Navigate to={"/projects"} />
+    }
     async function handleSendingInv(e){
         e.preventDefault();
-        console.log(email);
         try {
-            await SendInvitationToNewContributor(email,"c1c13d10-8e7a-4162-90df-ea1e63408200")
+            await SendInvitationToNewContributor(email,projectId as string)
             toast.success("invitation sent successfully")
             setEmail("")
-        } catch (error) {
-          console.log(error);
-            toast.error("user was not found")
+        } catch (error:any) {
+          if(error.response.data.error){
+            toast.error(error.response.data.error)
+          }else{
+            toast.error("user was not found")            
+          }
         }
     }
   return (

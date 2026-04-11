@@ -1,16 +1,15 @@
 import axios from "axios";
 import { useAuthStore } from "../STORE/Auth";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Api = axios.create({
     baseURL:"http://localhost:8080/api/v1",
-    withCredentials:true,
-    
+    withCredentials:true,    
 })
 
 Api.interceptors.request.use((config)=>{
     const token = useAuthStore.getState().auth?.token;
+    console.log(token);
     if(token){
         config.headers.Authorization=token;
     }

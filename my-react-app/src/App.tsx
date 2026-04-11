@@ -8,6 +8,7 @@ import ProjectsPage from './PAGES/ProjectPage'
 import {ToastContainer} from 'react-toastify'
 import { TaskProvider } from './HOOKS/Tasks/TaskContext'
 import AcceptProjectInvitationPage from './PAGES/AcceptProjectInvitePage'
+import RequireAuth from './HOOKS/RequireAuth'
 function App() {
 
 
@@ -16,7 +17,7 @@ function App() {
       <TaskProvider>
       <Routes>
         <Route path='/' element={<Auth/>} />
-        <Route path='/dashboard' element={<Sidebar/>}>
+        <Route path='/dashboard' element={<RequireAuth><Sidebar/></RequireAuth>}>
           <Route path='home' element={<HomePage/>}/>
           <Route path='tasks/:projectId?' element={<FlowTasks/>}/>
           <Route path='projects' element={<ProjectsPage/>}/>
