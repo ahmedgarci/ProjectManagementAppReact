@@ -26,3 +26,6 @@ jobs:
 
       - name: Build React Image
         run: docker build -t ${{ secrets.USERNAME}}/react_project_manag:1.0 .
+
+      - name : push image to docker hub
+        run : docker push ${{secrets.USERNAME}}/react_project_manag:1.0
