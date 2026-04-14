@@ -1,6 +1,7 @@
 
 export default function getStageColor (stage: string): 'default' | 'success' | 'info' {
-    switch (stage.toLowerCase()) {
+  stage = "completed";
+  switch (stage.toLowerCase()) {
       case 'completed':
         return 'success';
       case 'inprogress':

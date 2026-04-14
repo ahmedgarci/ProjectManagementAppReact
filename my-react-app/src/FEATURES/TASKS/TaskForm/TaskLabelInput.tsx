@@ -4,7 +4,7 @@ import { useTaskContext } from '../../../HOOKS/Tasks/TaskContext';
 
 
 
-export default function TaskLabelInput() {
+export default function TaskLabelInput({error}:{error:string}) {
   const {setState} = useTaskContext()
   
   const HandleTaskLabelChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -15,6 +15,8 @@ export default function TaskLabelInput() {
         <TextField
           label="Task Label"
           variant="outlined"
+          error={!!error}
+          helperText={error}
           type="text"
           onChange={HandleTaskLabelChange}
           required

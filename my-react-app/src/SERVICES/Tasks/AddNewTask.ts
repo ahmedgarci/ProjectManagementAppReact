@@ -1,8 +1,8 @@
 import { Api } from "../../HOOKS/AxiosApi";
-import type { CreateTaskRequest } from "./Model";
+import type { CreateTaskRequest, TaskNode } from "./Model";
 
 
-export default async function addNewProjectTask(req:CreateTaskRequest,projectId:string){
+export default async function addNewProjectTask(req:CreateTaskRequest,projectId:string):Promise<TaskNode>{
  const newReq = {
     taskVo:{task:req.task},
     projectPublicIdVo:{projectPublicId:projectId},
@@ -11,9 +11,10 @@ export default async function addNewProjectTask(req:CreateTaskRequest,projectId:
     parentTaskPublicIdVo:{parentTaskPublicId:req.parentTaskId}
     }     
     try {
-       await Api.post("/tasks/create",newReq)
-    } catch (error) {
-        console.log(error);
+       const response = await Api.post("/tasks/create",newReq)
+       return response.data;
+    } catch (error:any) {
+        throw error.response.data
     }
 
 }

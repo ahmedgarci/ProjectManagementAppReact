@@ -12,7 +12,7 @@ import { useTaskContext } from '../../../HOOKS/Tasks/TaskContext';
 import { useParams } from 'react-router-dom';
 
 
-export default function UsersSelect() {
+export default function UsersSelect({fieldError}:{fieldError:string}) {
   const {projectId} = useParams();
   const {state,setState} = useTaskContext()
 
@@ -29,7 +29,7 @@ export default function UsersSelect() {
 
   return (
     <div>
-      <FormControl sx={{ mx: 'auto', width: "100%" }}>
+      <FormControl sx={{ mx: 'auto', width: "100%" }} error={!!fieldError}>
         <InputLabel id="demo-simple-select-helper-label">user</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
@@ -61,7 +61,7 @@ export default function UsersSelect() {
           )})}
 
         </Select>
-        <FormHelperText>This task will be assigned to the selected user</FormHelperText>
+        {fieldError && <FormHelperText>{fieldError}</FormHelperText>}
       </FormControl>
 
     </div>

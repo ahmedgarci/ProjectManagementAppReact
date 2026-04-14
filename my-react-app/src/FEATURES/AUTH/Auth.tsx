@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { RegisterForm } from './RegisterForm';
 import { AuthForm } from './AuthForm';
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 
 export function Auth() {
@@ -10,12 +10,11 @@ export function Auth() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+        height: '100vh',
+        background: 'white',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        p: 2,
         fontFamily: "'Poppins', sans-serif",
       }}
     >
@@ -57,7 +56,7 @@ export function Auth() {
     onClick={() => setForm("auth")}
     sx={{
       color: 'white',
-      bgcolor: 'black',
+      bgcolor: '#f50057',
       textTransform: 'none',
       px: 4,
       borderRadius: 2,
@@ -76,7 +75,7 @@ export function Auth() {
     onClick={() => setForm("register")}
     sx={{
       color: 'white',
-      bgcolor: 'black',
+      bgcolor: '#f50057',
       textTransform: 'none',
       px: 4,
       borderRadius: 2,
@@ -92,25 +91,6 @@ export function Auth() {
         {form === "auth" ?  <AuthForm/>                    : 
         <RegisterForm/>
         }
-         <Divider sx={{marginTop:"15px"}}>OR </Divider>
-        <Button
-          variant="contained"
-          size="large"
-          fullWidth
-          sx={{
-            marginTop:"15px",
-            background: 'black',
-            color: '#fff',
-            fontWeight: 700,
-            py: 1.8,
-            borderRadius: 3,
-            boxShadow:
-              '0 4px 15px 0 ',
-           
-          }}
-        >
-          Login With Google
-        </Button>
        </Box>
     </Box>
   );

@@ -6,12 +6,13 @@ import { Box, Toolbar } from '@mui/material';
 export default function CenteredCalendar() {
   return (
     <>
-      <Toolbar />
       <Box
         sx={{
+          mt:3,
           borderRadius: 3,
           bgcolor: 'white',
           boxShadow: 1,
+          width:"100%"
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>

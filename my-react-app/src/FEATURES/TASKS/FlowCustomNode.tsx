@@ -4,7 +4,6 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import getStageColor from '../../COMPONENTS/common/GetStageColor';
 
 const CustomNode = ({ data, id }: any) => {
-
   return (
     <Box
       p={1.5}

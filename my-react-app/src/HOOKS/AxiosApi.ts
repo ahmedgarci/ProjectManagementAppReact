@@ -3,13 +3,12 @@ import { useAuthStore } from "../STORE/Auth";
 import { toast } from "react-toastify";
 
 const Api = axios.create({
-    baseURL:"http://localhost:8080/api/v1",
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials:true,    
 })
 
 Api.interceptors.request.use((config)=>{
     const token = useAuthStore.getState().auth?.token;
-    console.log(token);
     if(token){
         config.headers.Authorization=token;
     }

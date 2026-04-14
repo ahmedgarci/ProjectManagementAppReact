@@ -10,9 +10,17 @@ export async function AuthenticateUser(req:AuthReq):Promise<void>{
         userPasswordVo:{password:req.password}
     }
     try {
-       const {data} =  await axios.post("http://localhost:8080/api/v1/authentication/authenticate",reqBody);
+       const {data} =  await axios.post(`${import.meta.env.VITE_API_URL}/authentication/authenticate`,reqBody);
        useAuthStore.getState().setAuth(data)
-    } catch (error) {
-        throw "invalid Credentials"
+    } catch (error: any) {
+        const { status, data } = error.response;       
+        if (status === 400 && data) {
+            throw data;
+        }
+        else if (status === 404 && data ){
+            throw data
+        }
+        // Fallback
+        throw new Error("Something went wrong");
     }
 }

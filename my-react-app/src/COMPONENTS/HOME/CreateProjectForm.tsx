@@ -26,7 +26,7 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
     startingDateVo: undefined,
     endingDate: undefined,
   });
-
+  const [errors,setErrors] = useState<Record<string,string>>({})
   const handleChange = (field: keyof CreateProjectRequest) => 
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -45,8 +45,8 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
     try {
       await CreateProject(project)
       toast.success("project was created successfully")
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      setErrors(error)
     }
   };
 
@@ -57,6 +57,8 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
       <DialogContent sx={{ py: 2 }}>
         <TextField
           label="Project Name"
+          error={!!errors.name}
+          helperText={errors.name}
           fullWidth
           variant="outlined"
           value={project.projectNameVo}
@@ -67,6 +69,8 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
         <TextField
           label="Project Description"
           fullWidth
+          error={!!errors.description}
+          helperText={errors.description}
           variant="outlined"
           value={project.projectDescriptionVo}
           onChange={handleChange('projectDescriptionVo')}
@@ -77,6 +81,8 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
 
         <TextField
           label="Start Date"
+          error={!!errors.startingDate}
+          helperText={errors.startingDate}
           type="date"
           fullWidth
           value={formatDateInput(project.startingDateVo)}
@@ -88,6 +94,8 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
         <TextField
           label="End Date"
           type="date"
+          error={!!errors.endingDate}
+          helperText={errors.endingDate}
           fullWidth
           value={formatDateInput(project.endingDate)}
           onChange={handleChange('endingDate')}

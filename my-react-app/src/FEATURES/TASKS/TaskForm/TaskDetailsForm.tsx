@@ -8,27 +8,45 @@ import FormTitleLabel from './FormTitle';
 import TaskSubmitBtn from './FormSubmitBtn';
 import AddIcon from '@mui/icons-material/Add';
 import type { TaskDetailsFormProps } from './Shared/FormProps';
+import { useState } from 'react';
+import { useTaskContext } from '../../../HOOKS/Tasks/TaskContext';
+import Loader from '../../../COMPONENTS/Loading/Loading';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 350,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   borderRadius: 3,
   p: 4,
 };
 
-
-
-
-export default function TaskDetailsForm({state,setState,onSubmit}:TaskDetailsFormProps) {
+export default function TaskDetailsForm({state,setState,onSubmit}: TaskDetailsFormProps) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [Loading,setLoading] = useState<boolean>(false);
+  const { state: taskData } = useTaskContext();
 
   const handleOpen = () => setState(true);
   const handleClose = () => setState(false);
+
+  const handleSubmit = async () => {
+    try {
+      setErrors({});
+      setLoading(true);
+  
+      await onSubmit(taskData);
+  
+      handleClose();
+    } catch (err: any) {
+      console.log(err);
+        setErrors(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -44,30 +62,28 @@ export default function TaskDetailsForm({state,setState,onSubmit}:TaskDetailsFor
           fontWeight: 600,
           textTransform: 'none',
           boxShadow: '0 3px 5px rgba(0,0,0,0.3)',
-          '&:hover': {
-            backgroundColor: '#b71c1c',
-          },
-          '&:focus': {
-            outline: '2px solid white',
-            outlineOffset: '2px',
-          },
+          '&:hover': { backgroundColor: '#b71c1c' },
         }}
       >
         Add Task
-      </Button>   
-     <Modal
-        open={state}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
+      </Button>
+
+      <Modal open={state} onClose={handleClose} >
+        <Box sx={style} >
           <FormTitleLabel />
-          <TaskLabelInput />
-          <UsersSelect />
-          <DatePickers taskDateState='starting' />
-          <DatePickers taskDateState='ending' />
-          <TaskSubmitBtn onSubmit={onSubmit} />
+          <TaskLabelInput error={errors.task}/>
+          <UsersSelect fieldError={errors.userPublicId} />
+          <DatePickers taskDateState="starting" />
+          <DatePickers taskDateState="ending" />
+
+          {errors.general && (
+            <Box sx={{ color: 'red', mb: 2 }}>
+              {errors.general}
+            </Box>
+          )}
+          {Loading ? <Loader/> : 
+            <TaskSubmitBtn onSubmit={handleSubmit} />
+          }
         </Box>
       </Modal>
     </div>

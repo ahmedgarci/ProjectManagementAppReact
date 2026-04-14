@@ -19,7 +19,7 @@ export default function ProjectModalHeader(){
           New Project
         </Button>
       </Box>
-      <CreateProjectModal state={open} setState={setOpen} onSubmit={()=>console.log("object")}/>
+      <CreateProjectModal state={open} setState={setOpen} />
       </>
     )
 }

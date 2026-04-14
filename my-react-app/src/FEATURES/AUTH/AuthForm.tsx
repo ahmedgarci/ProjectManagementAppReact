@@ -11,16 +11,20 @@ import Loader from '../../COMPONENTS/Loading/Loading';
 export function AuthForm() {
     const [auth,setAuth] = useState<AuthReq>({email:null,password:null});
     const [loading,setLoading] = useState<boolean>(false);
-    const [error,setError]= useState<string|null>()
+    const [errors,setError]= useState<Record<string,string>>({})
     const navigate = useNavigate()
+
     async function Login(e:React.MouseEvent<HTMLButtonElement>){
+    setLoading(true)  
     e.preventDefault();
-    setError(null)
+    setError({})
     try {
       await AuthenticateUser(auth)
      navigate("/dashboard/home")
-    } catch (error) {
-      setError("invalid Credentials")
+    } catch (error:any) {
+      setError(error)
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -31,6 +35,8 @@ export function AuthForm() {
           label="Email"
           variant="outlined"
           type="email"
+          error={!!errors.email}
+          helperText={errors.email}
           required
           fullWidth
           onChange={(e:React.ChangeEvent<HTMLInputElement>)=>   setAuth(prevAuth => ({ ...prevAuth, email: e.target.value }))}
@@ -48,6 +54,8 @@ export function AuthForm() {
           label="Password"
           variant="outlined"
           type="password"
+          error={!!errors.password}
+          helperText={errors.password}
           required
           fullWidth
           onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setAuth((prevAuth)=>({...prevAuth, password:e.target.value}))}
@@ -60,7 +68,7 @@ export function AuthForm() {
             },
           }}
         />
-          {error && <DisplayError error={error}/>}
+          {errors.error && <DisplayError error={errors.error}/>}
           {loading ?  <Loader/>
         :
           
@@ -70,7 +78,7 @@ export function AuthForm() {
           fullWidth
           onClick={Login}
           sx={{
-            background: 'black',
+            background: '#f50057',
             color: '#fff',
             fontWeight: 700,
             py: 1.8,

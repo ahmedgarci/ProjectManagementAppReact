@@ -13,14 +13,24 @@ import { useState } from "react";
 import getStageColor from "../../COMPONENTS/common/GetStageColor";
 import DisplayProjectInfoModal from "./DisplayProjectInfos";
 import { NavLink } from "react-router-dom";
+import DeleteProject from "../../SERVICES/Projects/DeleteProject";
 
 interface ProjectCardProps {
   project: ProjectDetailsResponse;
+  state:ProjectDetailsResponse[],
+  setState: React.Dispatch<React.SetStateAction<ProjectDetailsResponse[]>>
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project,setState,state }: ProjectCardProps) {
   const [open, setOpen] = useState(false);
-
+  function  deleteProject(id:string) {
+      try {
+        DeleteProject(id);
+        setState(prev => prev.filter(p => p.projectId !== id));
+            } catch (error) {
+        
+      }
+  }
   const { projectName, startedAt, endsAt, projectTasks, stage, projectId } = project;
 
   const completedTasks = projectTasks?.completedTasks ?? 0;
@@ -32,6 +42,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     <Card
       variant="outlined"
       sx={{
+        flex:"1 1 250px",
+        maxWidth:"350px",
+        minWidth:"260px",
         borderRadius: 3,
         px: 2,
         py: 2,
@@ -88,7 +101,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         <Box display="flex" gap={1}>
           <DisplayProjectInfoModal state={{ state: open, setState: setOpen }} projectId={projectId} />
 
-          <IconButton size="small" onClick={() => console.log("Delete clicked")}>
+          <IconButton size="small" onClick={() => deleteProject(projectId)}>
             <DeleteOutline fontSize="small" />
           </IconButton>
         </Box>

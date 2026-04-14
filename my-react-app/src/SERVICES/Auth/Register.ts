@@ -10,9 +10,12 @@ export default async function Register(req:RegisterRequest):Promise<void>{
         userPasswordVo:{"password":req.password}
     }
     try {
-        await axios.post("http://localhost:8080/api/v1/authentication/register",userInfo)
+        await axios.post(`${import.meta.env.VITE_API_URL}/authentication/register`,userInfo)
     } catch (error:any) {
-        throw error.response.data.error
+        if(error.status == 400){
+            throw error.response.data
+        }
+        throw {general:"email already exists"}
     }
 }
 

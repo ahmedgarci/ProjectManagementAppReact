@@ -10,16 +10,17 @@ import Loader from '../../COMPONENTS/Loading/Loading';
 
 export function RegisterForm() {
     const [register,setRegister] = useState<RegisterRequest>({password:"",email:"",jobPosition:"",fullName:""});
-    const [error,setErro]= useState<string>()
+    const [errors,setError]= useState<Record<string,string>>({})
     const [loading,setLoading] = useState(false)
 
     async function RegisterUser(){
       setLoading(true)
+      setError({})
       try {
           await Register(register)
           toast.success("registred successfully")
       } catch (error:any) {
-        setErro(error)
+        setError(error)
       }finally{
         setLoading(false)
       }
@@ -28,10 +29,12 @@ export function RegisterForm() {
   return (
         <>
 
-<TextField
+        <TextField
           label="Full name"
           variant="outlined"
           type="text"
+          error={!!errors.fullName}
+          helperText={errors.fullName}
           required
           fullWidth
           onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setRegister((prev)=>({...prev, fullName:e.target.value}))}
@@ -49,6 +52,8 @@ export function RegisterForm() {
           label="Email"
           variant="outlined"
           type="email"
+          error={!!errors.email}
+          helperText={errors.email}
           required
           fullWidth
           onChange={(e:React.ChangeEvent<HTMLInputElement>)=>   setRegister(prev => ({ ...prev, email: e.target.value }))}
@@ -66,6 +71,8 @@ export function RegisterForm() {
           label="Position occupied"
           variant="outlined"
           type="text"
+          error={!!errors.jobPosition}
+          helperText={errors.jobPosition}
           required
           fullWidth
           onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setRegister((prev)=>({...prev, jobPosition:e.target.value}))}
@@ -85,6 +92,8 @@ export function RegisterForm() {
           label="Password"
           variant="outlined"
           type="password"
+          error={!!errors.password }
+          helperText={errors.password}
           required
           fullWidth
           onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setRegister((prev)=>({...prev, password:e.target.value}))}
@@ -98,7 +107,7 @@ export function RegisterForm() {
           }}
         />
 
-          {error && <DisplayError error={error}/>}
+          {errors.general && <DisplayError error={errors.general}/>}
 
           {loading? <Loader/>  :
 
@@ -109,7 +118,7 @@ export function RegisterForm() {
           fullWidth
           onClick={RegisterUser}
           sx={{
-            background: 'black',
+            background: '#f50057',
             color: '#fff',
             fontWeight: 700,
             py: 1.8,
