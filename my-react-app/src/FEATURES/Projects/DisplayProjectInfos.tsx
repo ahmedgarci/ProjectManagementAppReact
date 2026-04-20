@@ -24,9 +24,7 @@ export default function DisplayProjectInfoModal({ state, projectId }: ProjectInf
   const handleOpen = () => state.setState(true);
   const handleClose = () => state.setState(false);
 
-  const { data: projectDetails, loading, error } = useFetch<ProjectDetailsResponse>(
-    `/project/${projectId}`
-  );
+  const { data: projectDetails, loading, error } = useFetch<ProjectDetailsResponse>(`/project/${projectId}`);
 
   return (
     <div>

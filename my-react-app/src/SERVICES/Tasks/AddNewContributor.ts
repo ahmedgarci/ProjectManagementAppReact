@@ -8,7 +8,6 @@ export default async function SendInvitationToNewContributor(userEmail:string,pr
     }
     try {
         const response  = await Api.post("/contributors",req)
-        console.log(response);
     } catch (error:any) {
         throw error.response.data
     }

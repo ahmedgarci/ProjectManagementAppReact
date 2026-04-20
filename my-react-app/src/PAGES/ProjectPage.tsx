@@ -1,27 +1,39 @@
-import { useEffect, useState } from "react";
-import {
-  TextField,
-  InputAdornment,
-  Container,
-  Box,
-  Typography,
-} from "@mui/material";
+import {useEffect, useState } from "react";
+import {TextField,InputAdornment,Container,Box,Typography} from "@mui/material";
 import { SearchRounded } from "@mui/icons-material";
 import useFetch from "../HOOKS/useFetch";
 import Loader from "../COMPONENTS/Loading/Loading";
 import type { ProjectDetailsResponse } from "../SERVICES/Projects/ProjectDomain";
 import ProjectModalHeader from "../FEATURES/Projects/ProjectModalHeader";
 import ProjectCard from "../FEATURES/Projects/ProjectCard";
+import DeleteProject from "../SERVICES/Projects/DeleteProject";
 
 export default function ProjectsPage() {
   const [search, setSearch] = useState("");
-  const [allProjects, setAllProjects] = useState<ProjectDetailsResponse[]>([]);
-
-  const { data: projects, loading, error } = useFetch<ProjectDetailsResponse[]>("/project/all");
+  const [projects, setProjects] = useState<ProjectDetailsResponse[]>([]);
+  const { data: allProjects, loading, error } = useFetch<ProjectDetailsResponse[]>("/project/all");
 
   useEffect(() => {
-    if (projects) setAllProjects(projects);
-  }, [projects]);
+    if (allProjects) setProjects(allProjects);
+  }, [allProjects]);
+
+
+  const filteredProjects = projects.filter(project => project.projectName?.toLowerCase().includes(search.toLowerCase()));
+
+  async function deleteProject(id:string){
+      try {
+        await DeleteProject(id);
+        setProjects(prev => prev.filter(p => p.projectId !== id));
+      } catch (error) {
+              console.log(error);
+      }
+  }
+
+  {error && (
+    <Typography color="error" sx={{ mb: 2 }}>
+      Failed to load projects
+    </Typography>
+  )}
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -45,7 +57,7 @@ export default function ProjectsPage() {
 
       {loading && <Loader />}
 
-      {!loading && allProjects.length === 0 && (
+      {!loading && filteredProjects.length === 0 && (
         <Box
           sx={{
             width: "100%",
@@ -68,7 +80,7 @@ export default function ProjectsPage() {
         </Box>
       )}
 
-      {!loading && allProjects.length > 0 && (
+      {!loading && projects.length > 0 && (
         <Box
           sx={{
             display: "flex",
@@ -78,7 +90,7 @@ export default function ProjectsPage() {
             width: "100%",
           }}
         >
-          {allProjects.map((project) => (
+          {filteredProjects?.map((project) => (
             <Box
               key={project.projectId}
               sx={{
@@ -88,8 +100,7 @@ export default function ProjectsPage() {
               }}
             >
               <ProjectCard
-                setState={setAllProjects}
-                state={allProjects}
+                deleteFn={deleteProject}
                 project={project}
               />
             </Box>

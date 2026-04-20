@@ -3,7 +3,7 @@ import { Handle, Position } from '@xyflow/react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import getStageColor from '../../COMPONENTS/common/GetStageColor';
 
-const CustomNode = ({ data, id }: any) => {
+const CustomNode = ({ data}: any) => {
   return (
     <Box
       p={1.5}

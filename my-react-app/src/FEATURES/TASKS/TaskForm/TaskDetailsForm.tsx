@@ -9,7 +9,6 @@ import TaskSubmitBtn from './FormSubmitBtn';
 import AddIcon from '@mui/icons-material/Add';
 import type { TaskDetailsFormProps } from './Shared/FormProps';
 import { useState } from 'react';
-import { useTaskContext } from '../../../HOOKS/Tasks/TaskContext';
 import Loader from '../../../COMPONENTS/Loading/Loading';
 
 const style = {
@@ -24,10 +23,23 @@ const style = {
   p: 4,
 };
 
-export default function TaskDetailsForm({state,setState,onSubmit}: TaskDetailsFormProps) {
+interface TaskRequest{
+  task: string,
+  userPublicId: string,
+  start:string | null,
+  end:string|null,
+}
+
+export default function TaskDetailsForm({ state, setState, onSubmit }: TaskDetailsFormProps) {
+
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [Loading,setLoading] = useState<boolean>(false);
-  const { state: taskData } = useTaskContext();
+  const [Loading, setLoading] = useState<boolean>(false);
+  const [form, setForm] = useState<TaskRequest>({
+    task: "",
+    userPublicId: "",
+    start:null,
+    end:null,
+  });
 
   const handleOpen = () => setState(true);
   const handleClose = () => setState(false);
@@ -36,13 +48,11 @@ export default function TaskDetailsForm({state,setState,onSubmit}: TaskDetailsFo
     try {
       setErrors({});
       setLoading(true);
-  
-      await onSubmit(taskData);
-  
+
+      await onSubmit(form);
       handleClose();
     } catch (err: any) {
-      console.log(err);
-        setErrors(err);
+      setErrors(err);
     } finally {
       setLoading(false);
     }
@@ -71,17 +81,45 @@ export default function TaskDetailsForm({state,setState,onSubmit}: TaskDetailsFo
       <Modal open={state} onClose={handleClose} >
         <Box sx={style} >
           <FormTitleLabel />
-          <TaskLabelInput error={errors.task}/>
-          <UsersSelect fieldError={errors.userPublicId} />
-          <DatePickers taskDateState="starting" />
-          <DatePickers taskDateState="ending" />
+          <TaskLabelInput value={form.task} error={errors.task} onChange={(v) => setForm((prev) => ({ ...prev, task: v }))} />
+          <UsersSelect
+          fieldError=""
+  value={form.userPublicId ?? ''}
+  onChange={(v) =>
+    setForm(prev => ({
+      ...prev,
+      userPublicId: v
+    }))
+  }
+             />
+          <DatePickers
+  label="Starting"
+  value={form.start}
+  onChange={(v) =>
+    setForm(prev => ({
+      ...prev,
+      start: v
+    }))
+  }
+/>
+
+<DatePickers
+  label="Ending"
+  value={form.end}
+  onChange={(v) =>
+    setForm(prev => ({
+      ...prev,
+      end: v
+    }))
+  }
+/>
 
           {errors.general && (
             <Box sx={{ color: 'red', mb: 2 }}>
               {errors.general}
             </Box>
           )}
-          {Loading ? <Loader/> : 
+          {Loading ? <Loader /> :
             <TaskSubmitBtn onSubmit={handleSubmit} />
           }
         </Box>

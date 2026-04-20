@@ -3,25 +3,30 @@ import SendInvitationToNewContributor from "../../../SERVICES/Tasks/AddNewContri
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router-dom";
+import Loader from "../../../COMPONENTS/Loading/Loading";
 
 export default function AddNewContributor() {
     const [email,setEmail] = useState<string>("")
     const {projectId} = useParams();
+    const [isLoading,setLoading] = useState<boolean>(false)
     if(!projectId){
       return <Navigate to={"/projects"} />
     }
-    async function handleSendingInv(e){
+    async function handleSendingInv(e:React.FormEvent<HTMLFormElement>){
         e.preventDefault();
+        setLoading(true)
         try {
-            await SendInvitationToNewContributor(email,projectId as string)
+            await SendInvitationToNewContributor(email,projectId!);
             toast.success("invitation sent successfully")
             setEmail("")
         } catch (error:any) {
-          if(error.response.data.error){
-            toast.error(error.response.data.error)
+          if(error.status == 404){
+            toast.error(error.error)
           }else{
-            toast.error("user was not found")            
+            toast.error("network Error")            
           }
+        }finally{
+          setLoading(false);
         }
     }
   return (
@@ -36,7 +41,11 @@ export default function AddNewContributor() {
         mt: 2,
       }}
     >
-      <TextField
+
+    {
+        isLoading ? <Loader /> :
+        <>
+        <TextField
         label="Contributor Email"
         type="email"
         variant="outlined"
@@ -45,7 +54,7 @@ export default function AddNewContributor() {
         onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setEmail(e.target.value)}
         sx={{ flex: 1 }}
       />
-      <Button
+         <Button
         type="submit"
         variant="contained"
         color="error"
@@ -53,6 +62,9 @@ export default function AddNewContributor() {
       >
         Send Invite
       </Button>
+      </>
+      }
+     
     </Box>
   );
 }

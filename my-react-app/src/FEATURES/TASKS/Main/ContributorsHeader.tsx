@@ -1,4 +1,4 @@
-import { Avatar, Box, IconButton, TextField } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Loader from "../../../COMPONENTS/Loading/Loading";
 import useFetch from "../../../HOOKS/useFetch";
 import type { ProjectContributorResponse } from "../../../SERVICES/Tasks/Model";
@@ -12,6 +12,9 @@ export default function ContributorsHeader({ ProjectPublicId }: ContributorsHead
   const {data: contributors,loading,error} = useFetch<ProjectContributorResponse[]>(`/contributors/${ProjectPublicId}`);
   if (loading) return <Loader />;
 
+  if(error){
+    return <Typography bgcolor={"error"}>Error Loading The Contributors</Typography>
+  }
   return (
     <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 4, gap: 1 }}>
       <ContributorsModal contributors={contributors!}/>

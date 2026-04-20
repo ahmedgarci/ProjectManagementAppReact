@@ -13,24 +13,15 @@ import { useState } from "react";
 import getStageColor from "../../COMPONENTS/common/GetStageColor";
 import DisplayProjectInfoModal from "./DisplayProjectInfos";
 import { NavLink } from "react-router-dom";
-import DeleteProject from "../../SERVICES/Projects/DeleteProject";
 
 interface ProjectCardProps {
   project: ProjectDetailsResponse;
-  state:ProjectDetailsResponse[],
-  setState: React.Dispatch<React.SetStateAction<ProjectDetailsResponse[]>>
+  deleteFn: (projectId:string)=>void
 }
 
-export default function ProjectCard({ project,setState,state }: ProjectCardProps) {
+export default function ProjectCard({ project,deleteFn }: ProjectCardProps) {
   const [open, setOpen] = useState(false);
-  function  deleteProject(id:string) {
-      try {
-        DeleteProject(id);
-        setState(prev => prev.filter(p => p.projectId !== id));
-            } catch (error) {
-        
-      }
-  }
+
   const { projectName, startedAt, endsAt, projectTasks, stage, projectId } = project;
 
   const completedTasks = projectTasks?.completedTasks ?? 0;
@@ -101,7 +92,7 @@ export default function ProjectCard({ project,setState,state }: ProjectCardProps
         <Box display="flex" gap={1}>
           <DisplayProjectInfoModal state={{ state: open, setState: setOpen }} projectId={projectId} />
 
-          <IconButton size="small" onClick={() => deleteProject(projectId)}>
+          <IconButton size="small" onClick={()=>deleteFn(projectId)}>
             <DeleteOutline fontSize="small" />
           </IconButton>
         </Box>

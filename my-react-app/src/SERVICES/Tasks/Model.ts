@@ -2,8 +2,8 @@
 export type CreateTaskRequest={
     userId?:string,
     task?:string,
-    taskStartingDate?:Date,
-    taskEndingDate?:Date,
+    taskStartingDate?:string,
+    taskEndingDate?:string,
     parentTaskId?:string
 }
 

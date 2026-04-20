@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom"
-import { useAuthStore } from "../STORE/Auth";
+import { useAuthStore } from "../../STORE/Auth";
 
 
 export default function RequireAuth({children}){
