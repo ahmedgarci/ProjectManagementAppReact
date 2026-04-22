@@ -41,15 +41,15 @@ export default function TaskDetailsForm({ state, setState, onSubmit }: TaskDetai
     end:null,
   });
 
-  const handleOpen = () => setState(true);
-  const handleClose = () => setState(false);
+  const handleOpen = () => setState!(true);
+  const handleClose = () => setState!(false);
 
   const handleSubmit = async () => {
     try {
       setErrors({});
       setLoading(true);
 
-      await onSubmit(form);
+      await onSubmit!(form);
       handleClose();
     } catch (err: any) {
       setErrors(err);

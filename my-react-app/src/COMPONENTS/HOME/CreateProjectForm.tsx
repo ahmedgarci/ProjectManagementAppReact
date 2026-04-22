@@ -39,7 +39,7 @@ export default function CreateProjectModal({ state, setState }: TaskDetailsFormP
       }));
     };
 
-  const handleClose = () => setState(false);
+  const handleClose = () => setState!(false);
 
   const handleCreate = async() => {
     try {
