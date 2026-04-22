@@ -68,7 +68,7 @@ function useFlowGraph(projectId: string) {
   }, [isconnecting]);
 
 
-    const addNode = async (form:TaskNode) => {
+    const addNode = async (form:any) => {
     const tempId = crypto.randomUUID();
     const optimisticNode: Node = {
       id: tempId,
