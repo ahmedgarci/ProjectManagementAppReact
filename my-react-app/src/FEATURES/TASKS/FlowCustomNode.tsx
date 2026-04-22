@@ -1,4 +1,4 @@
-import { Box, Typography, Chip, Stack, IconButton, Tooltip } from '@mui/material';
+import { Box, Typography, Stack, IconButton, Tooltip } from '@mui/material';
 import { Handle, Position } from '@xyflow/react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import TaskStage from './TaskStage';

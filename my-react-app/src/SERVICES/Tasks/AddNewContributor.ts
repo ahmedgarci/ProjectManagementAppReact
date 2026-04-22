@@ -7,7 +7,7 @@ export default async function SendInvitationToNewContributor(userEmail:string,pr
         "projectPublicIdVo":{"projectPublicId":projectId}
     }
     try {
-        const response  = await Api.post("/contributors",req)
+        await Api.post("/contributors",req)
     } catch (error:any) {
         throw error.response.data
     }

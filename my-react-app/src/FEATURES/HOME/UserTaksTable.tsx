@@ -18,6 +18,13 @@ export default function UserTasksTable() {
     return <Loader />;
   }
 
+  if(error){
+    return(
+    <Typography sx={{ mt: 4, textAlign: "center", color: "red" }}>
+        Netowrk Error
+      </Typography>
+  )}
+
   if (!tasks || tasks.length === 0) {
     return (
       <Typography sx={{ mt: 4, textAlign: "center", color: "#1a237e" }}>
