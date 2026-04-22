@@ -24,7 +24,7 @@ export type TaskNode = {
 }
 
 export type ProjectContributorResponse = {
-     publicId:string;
+    publicId:string;
     userEmail:string;
     jobPos:string;
 }

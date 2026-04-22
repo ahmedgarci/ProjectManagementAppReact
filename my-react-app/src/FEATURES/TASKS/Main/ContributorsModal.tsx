@@ -11,6 +11,10 @@ import {
 import type { ProjectContributorResponse } from '../../../SERVICES/Tasks/Model';
 import AddNewContributor from './NewContributor';
 import GroupsIcon from '@mui/icons-material/Groups';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import { useParams } from 'react-router-dom';
+import UnassignContributorFromProject from '../../../SERVICES/Home/Contributors/DeleteContributor';
+import { toast } from 'react-toastify';
 
 const modalStyle = {
   position: 'absolute' as const,
@@ -27,14 +31,30 @@ const modalStyle = {
 };
 
 interface ContributorsModalProps {
-  contributors: ProjectContributorResponse[];
+  contributors: ProjectContributorResponse[],
+  onRemoveContributor:(id:string)=>void
 }
 
-export default function ContributorsModal({ contributors }: ContributorsModalProps) {
+export default function ContributorsModal({ contributors,onRemoveContributor }: ContributorsModalProps) {
 
   const [open, setOpen] = React.useState(false);
+  const [Loading,setLoading] = React.useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const {projectId} = useParams();
+
+  const HandleDelete =async (id:string) => {
+    setLoading(true)
+    try {
+      await UnassignContributorFromProject({userId:id,projectId:projectId!})
+      onRemoveContributor(id)
+      toast.success("contributor was removed from the project")
+    } catch (error) {
+      toast.error("Cannot remove user from the project")
+    }finally{
+      setLoading(false)
+    }
+  }
 
   return (
     <>
@@ -65,7 +85,7 @@ export default function ContributorsModal({ contributors }: ContributorsModalPro
               No contributors found.
             </Typography>
           ) : (
-            <Stack spacing={2}>
+            <Stack spacing={1} sx={{overflowY:'scroll'}}>
               { (contributors ?? []).map((contributor, index) => (
                 <Box
                   key={contributor.publicId || index}
@@ -92,6 +112,9 @@ export default function ContributorsModal({ contributors }: ContributorsModalPro
                       {contributor.jobPos}
                     </Typography>
                   </Box>
+                  <IconButton disabled={Loading} sx={{marginLeft:"auto"}} onClick={()=>HandleDelete(contributor.publicId)}>
+                    <DeleteOutline />
+                    </IconButton>
                 </Box>
               ))}
             </Stack>

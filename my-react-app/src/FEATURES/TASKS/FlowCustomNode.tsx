@@ -1,9 +1,10 @@
 import { Box, Typography, Chip, Stack, IconButton, Tooltip } from '@mui/material';
 import { Handle, Position } from '@xyflow/react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import getStageColor from '../../COMPONENTS/common/GetStageColor';
+import TaskStage from './TaskStage';
 
 const CustomNode = ({ data}: any) => {
+
   return (
     <Box
       p={1.5}
@@ -34,12 +35,9 @@ const CustomNode = ({ data}: any) => {
           {data.task}
         </Typography>
 
-        <Chip
-          label={data.stage}
-          color={getStageColor(data.stage)}
-          size="small"
-          sx={{ flexShrink: 0, fontWeight: 500 }}
-        />
+        
+        <TaskStage selectedElement={data.stage} onChange={()=>{}}/>
+        
 
         <Tooltip title="Delete Node">
           <IconButton size="small" onClick={data.onDelete} sx={{ ml: 0.5 }}>
