@@ -10,7 +10,6 @@ export async function AuthenticateUser(req:AuthReq):Promise<void>{
         userPasswordVo:{password:req.password}
     }
     try {
-        console.log(import.meta.env.VITE_API_URL);
        const {data} =  await axios.post(`${import.meta.env.VITE_API_URL}/authentication/authenticate`,reqBody);
        useAuthStore.getState().setAuth(data)
     } catch (error: any) {

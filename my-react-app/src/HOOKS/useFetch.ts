@@ -24,7 +24,6 @@ export default function useFetch<T>(path:string|null){
                 setData(response.data);
                 setError(undefined)
             }catch(e:any){
-                console.log(e);
                 setError(e.message || "oops something went wrong ! ")
             }finally{
     

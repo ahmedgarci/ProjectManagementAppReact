@@ -75,7 +75,7 @@ export default function ProjectsPage() {
           </Typography>
 
           <Typography variant="body2" sx={{ mt: 1 }}>
-            Create your first project to get started 🚀
+            Create your first project to get started 
           </Typography>
         </Box>
       )}

@@ -1,10 +1,8 @@
 import axios from "axios";
 import { useAuthStore } from "../STORE/Auth";
-import { toast } from "react-toastify";
 
 const Api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials:true,    
+    baseURL: import.meta.env.VITE_API_URL   
 })
 
 Api.interceptors.request.use((config)=>{
@@ -23,9 +21,9 @@ Api.interceptors.response.use((response)=>{
     return response;
 },
     (error)=>{
+        console.log(error);
         if(error.response.status == 401){
-            toast.error("session expired")
-            window.location.href="/"
+//            window.location.href="/"
         }
         return Promise.reject(error)
     }

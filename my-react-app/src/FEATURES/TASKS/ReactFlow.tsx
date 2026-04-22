@@ -1,9 +1,15 @@
-import {ReactFlow,Controls,Background,ReactFlowProvider} from '@xyflow/react';
+import {
+  ReactFlow,
+  Controls,
+  Background,
+  ReactFlowProvider,
+  BackgroundVariant
+} from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
 
 import TaskDetailsForm from './TaskForm/TaskDetailsForm';
-import { Box, Divider, Paper, Stack } from '@mui/material';
+import { Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import CustomNode from './FlowCustomNode';
 import { Navigate, useParams } from 'react-router-dom';
 import Loader from '../../COMPONENTS/Loading/Loading';
@@ -17,27 +23,40 @@ const CustomNodeType = {
 
 export default function Flow() {
   const { projectId } = useParams();
+
   if (!projectId) {
     return <Navigate to="/dashboard/projects" replace />;
   }
 
-  const {flowNodes,edges,loading,error,onNodesChange,isconnecting,onEdgesChange,onConnect,addNode} = useFlowGraph(projectId);
-  const [showModal,setShowModal] = useState<boolean>(false);
+  const {
+    flowNodes,
+    edges,
+    loading,
+    error,
+    onNodesChange,
+    isconnecting,
+    onEdgesChange,
+    onConnect,
+    addNode
+  } = useFlowGraph(projectId);
 
+  const [showModal, setShowModal] = useState<boolean>(false);
 
-  if (loading) return <Loader />
-  if (error) return <div>Error loading tasks</div>;
+  if (loading) return <Loader />;
+  if (error) return <Typography sx={{textAlign:"center"}}>Error loading tasks</Typography>;
+
   return (
     <>
       <Paper
-        elevation={0}
-        sx={{
-          px: 3,
-          py: 2,
-          borderColor: 'divider',
-          backgroundColor: 'background.default'
-        }}
-      >
+  elevation={0}
+  sx={{
+    px: 3,
+    py: 1.2,
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
+    border: 'none'
+  }}
+>
         <Stack
           direction="row"
           alignItems="center"
@@ -49,15 +68,23 @@ export default function Flow() {
             <TaskDetailsForm
               state={showModal}
               setState={setShowModal}
-              onSubmit={(form:any)=>addNode(form)}
+              onSubmit={(form: any) => addNode(form)}
             />
           </Box>
+
           <ContributorsHeader ProjectPublicId={projectId!} />
         </Stack>
-        <Divider sx={{ my: 2 }} />
-      </Paper>
 
-      <div style={{ height: '100vh', width: '100%' }}>
+        <Divider sx={{ my: 1 }} />
+      </Paper>
+      <Box
+        sx={{
+          height: 'calc(100vh - 80px)',
+          width: '100%',
+          overflow: 'hidden',
+          background: '#f8fafc'
+        }}
+      >
         <ReactFlowProvider>
           <ReactFlow
             nodeTypes={CustomNodeType}
@@ -68,12 +95,36 @@ export default function Flow() {
             onConnect={onConnect}
             nodesConnectable={!isconnecting}
             fitView
+            panOnScroll
+            selectionOnDrag
+            zoomOnScroll
+            zoomOnPinch
+            panOnDrag
+
+            deleteKeyCode={['Backspace', 'Delete']}
+            multiSelectionKeyCode="Shift"
+            defaultEdgeOptions={{
+              type: 'smoothstep',
+              style: {
+                strokeWidth: 3,
+                stroke: '#616161'
+              }
+            }}
+            style={{
+              background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)'
+            }}
           >
-            <Background />
+            <Background
+              variant={BackgroundVariant.Dots}
+              gap={18}
+              size={1}
+              color="#cbd5e1"
+            />
+
             <Controls />
           </ReactFlow>
         </ReactFlowProvider>
-      </div>
+      </Box>
     </>
   );
 }

@@ -38,7 +38,6 @@ function useFlowGraph(projectId: string) {
 
   useEffect(() => {
     if (!tree) return;
-
     const { nodes, edges } =TransformTreeToReactFlow(tree, deleteNode);
     setFlowNodes(nodes);
     setFlowEdges(edges);
@@ -115,7 +114,6 @@ function useFlowGraph(projectId: string) {
 
     } catch (error) {
       setFlowNodes(prev => prev.filter(n => n.id !== tempId));
-      console.log(error);
       toast.error("Failed to create task");
     }
   };

@@ -22,7 +22,7 @@ export default function TaskDatePicker({
           onChange(e.target.value || null)
         }
         style={{
-          width: '100%',
+          width: '94%',
           padding: 10,
           borderRadius: 6,
           border: '1px solid #ccc'
