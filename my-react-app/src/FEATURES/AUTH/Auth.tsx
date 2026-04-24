@@ -40,7 +40,7 @@ export function Auth() {
             color: '#333',
           }}
         >
-          Welcome to Task Net
+      Continue to your workspace
         </Typography>
         <Box
   sx={{

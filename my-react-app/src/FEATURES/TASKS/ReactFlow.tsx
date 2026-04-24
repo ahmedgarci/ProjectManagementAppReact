@@ -3,7 +3,8 @@ import {
   Controls,
   Background,
   ReactFlowProvider,
-  BackgroundVariant
+  BackgroundVariant,
+  MarkerType
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
@@ -28,17 +29,7 @@ export default function Flow() {
     return <Navigate to="/dashboard/projects" replace />;
   }
 
-  const {
-    flowNodes,
-    edges,
-    loading,
-    error,
-    onNodesChange,
-    isconnecting,
-    onEdgesChange,
-    onConnect,
-    addNode
-  } = useFlowGraph(projectId);
+  const {flowNodes,edges,loading,error,onNodesChange,isconnecting,onEdgesChange,onConnect,addNode,enhancedNodes,onSelectNode} = useFlowGraph(projectId);
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -88,27 +79,35 @@ export default function Flow() {
         <ReactFlowProvider>
           <ReactFlow
             nodeTypes={CustomNodeType}
-            nodes={flowNodes}
+            nodes={enhancedNodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             nodesConnectable={!isconnecting}
+            onNodeClick={(_, node) => {
+              onSelectNode(node.id);
+            }} 
             fitView
             panOnScroll
             selectionOnDrag
             zoomOnScroll
             zoomOnPinch
             panOnDrag
-
             deleteKeyCode={['Backspace', 'Delete']}
             multiSelectionKeyCode="Shift"
             defaultEdgeOptions={{
-              type: 'smoothstep',
+              type: 'bezier',
               style: {
                 strokeWidth: 3,
-                stroke: '#616161'
-              }
+                stroke: '#FF0072',
+              },
+              markerEnd: {
+                type: MarkerType.ArrowClosed,
+                width: 20,
+                height: 20,
+                color: '#FF0072'
+              },
             }}
             style={{
               background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)'

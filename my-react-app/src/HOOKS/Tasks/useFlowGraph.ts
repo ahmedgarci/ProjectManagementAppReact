@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { TaskNode } from "../../SERVICES/Tasks/Model";
 import useFetch from "../useFetch";
 
@@ -18,12 +18,13 @@ import DeleteTask from "../../SERVICES/Tasks/DeleteNode";
 import AddEdge from "../../SERVICES/Tasks/AddEdgeBetweenTasks";
 import { toast } from "react-toastify";
 import addNewProjectTask from "../../SERVICES/Tasks/AddNewTask";
+import { getDownStreamNodes, getUpStreamNodes } from "../../Common/Graph/GraphUtils";
 
 function useFlowGraph(projectId: string) {
   const [flowNodes, setFlowNodes] = useState<Node[]>([]);
   const [edges, setFlowEdges] = useState<Edge[]>([]);
   const [isconnecting,setIsConnecting] = useState<boolean>(false)
-
+  const [selectedNode,setSelectedNode] = useState<Node>();
   const { data: tree, error, loading } = useFetch<TaskNode[]>(`/tasks/${projectId}`);
 
   const deleteNode = useCallback(async (taskId: string) => {
@@ -118,8 +119,57 @@ function useFlowGraph(projectId: string) {
     }
   };
 
-  
+  const onSelectNode = useCallback((nodeId:string)=>{
+    const node = flowNodes.find(node => node.id === nodeId);
+    setSelectedNode(node);
+  },[flowNodes])
 
+  const downStreamNodes = useMemo(()=>{
+    return selectedNode ? getDownStreamNodes(selectedNode.id,edges) : [];
+  },[selectedNode,edges]) 
+
+  const upStreamNodes = useMemo(()=>{
+    return selectedNode ? getUpStreamNodes(selectedNode.id,edges) : [];
+  },[flowNodes,edges])
+
+  const enhancedNodes = useMemo(() => {
+    return flowNodes.map((node) => {
+      const isSelected = selectedNode?.id === node.id;
+      const isDownstream = downStreamNodes.includes(node.id);
+      const isUpstream = upStreamNodes.includes(node.id);
+  
+      let background = '#fff';
+      let border = '1px solid #e2e8f0';
+      let opacity = 1;
+  
+      if (selectedNode) {
+        if (isSelected) {
+          background = '#111827';
+          border = '2px solid #000';
+        } else if (isDownstream) {
+          background = '#fee2e2';
+          border = '2px solid #ef4444';
+        } else if (isUpstream) {
+          background = '#dbeafe'; 
+          border = '2px solid #3b82f6';
+        } else {
+          opacity = 0.4;
+        }
+      }
+  
+      return {
+        ...node,
+        style: {
+          ...node.style,
+          background,
+          border,
+          opacity,
+          borderRadius: 8,
+          transition: 'all 0.2s ease',
+        },
+      };
+    });
+  }, [flowNodes, selectedNode, downStreamNodes, upStreamNodes]);
 
   return {
     flowNodes,
@@ -131,7 +181,11 @@ function useFlowGraph(projectId: string) {
     onConnect,
     deleteNode,
     addNode,
-    isconnecting
+    isconnecting,
+    downStreamNodes,
+    upStreamNodes,
+    onSelectNode,
+    enhancedNodes
   };
 }
 
